@@ -1,3 +1,4 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/embano1/memlog.svg)](https://pkg.go.dev/github.com/embano1/memlog)
 [![Tests](https://github.com/embano1/memlog/actions/workflows/tests.yaml/badge.svg)](https://github.com/embano1/memlog/actions/workflows/tests.yaml)
 [![Latest Release](https://img.shields.io/github/release/embano1/memlog.svg?logo=github&style=flat-square)](https://github.com/embano1/memlog/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/embano1/memlog)](https://goreportcard.com/report/github.com/embano1/memlog)
