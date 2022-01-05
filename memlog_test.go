@@ -4,9 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
+	"math/rand"
 	"testing"
+	"time"
 
 	"github.com/benbjohnson/clock"
+	"github.com/pkg/profile"
 	"go.uber.org/zap/zaptest"
 	"golang.org/x/sync/errgroup"
 	"gotest.tools/v3/assert"
@@ -228,4 +232,31 @@ func dedupe(t *testing.T, records []memlog.Record) []memlog.Record {
 	}
 
 	return deduped
+}
+
+func Test_DeepCopy(t *testing.T) {
+	// Run with
+	// go test -v -run Test_DeepCopy -count 1 .
+	ctx := context.Background()
+
+	N := memlog.DefaultMaxRecordSize
+	randSource := rand.New(rand.NewSource(time.Now().UnixNano()))
+	data := make([]byte, N)
+	n, err := io.ReadFull(randSource, data)
+	assert.NilError(t, err)
+	assert.Equal(t, N, n)
+
+	ml, err := memlog.New(ctx)
+	assert.NilError(t, err)
+	offset, err := ml.Write(ctx, data)
+	assert.NilError(t, err)
+
+	prof := profile.Start(profile.MemProfile)
+	for i := 0; i < 1024; i++ {
+		rec, err := ml.Read(ctx, offset)
+		if err != nil || rec.Data == nil {
+			t.Fatal("read failed")
+		}
+	}
+	prof.Stop()
 }
