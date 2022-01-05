@@ -45,13 +45,14 @@ func (r Record) deepCopy() Record {
 		return Record{}
 	}
 
-	dCopy := append([]byte(nil), r.Data...)
+	data := make([]byte, len(r.Data))
+	copy(data, r.Data)
 	return Record{
 		Metadata: Header{
 			Offset:  r.Metadata.Offset,
 			Created: r.Metadata.Created,
 		},
-		Data: dCopy,
+		Data: data,
 	}
 }
 
